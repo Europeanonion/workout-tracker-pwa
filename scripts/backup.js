@@ -12,13 +12,14 @@ function backup() {
     }
 }
 
-const task = cron.schedule('*/30 * * * *', backup);
-console.log('Backup scheduler started');
+// Comment out or remove the cron schedule
+// const task = cron.schedule('*/30 * * * *', backup);
+// console.log('Backup scheduler started');
 
 // Handle termination signals
 function cleanup() {
     console.log('Stopping backup scheduler...');
-    task.stop();
+    // task.stop();
     process.exit(0);
 }
 
