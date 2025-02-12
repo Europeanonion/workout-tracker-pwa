@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import phaseData from "@/lib/workoutData.json";
 import PhaseSelector from "./PhaseSelector";

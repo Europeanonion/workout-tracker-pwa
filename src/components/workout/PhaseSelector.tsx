@@ -1,3 +1,5 @@
+'use client';
+
 import { PhaseKey } from "@/types/workout";
 import React, { Dispatch, SetStateAction } from "react";
 

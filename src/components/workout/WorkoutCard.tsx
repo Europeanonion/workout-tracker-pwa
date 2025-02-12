@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { WorkoutItem } from "@/types/workout"; // Import proper type
 
