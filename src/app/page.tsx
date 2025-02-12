@@ -6,10 +6,42 @@ import Button from "@/components/ui/button";
 import Progress from "@/components/ui/progress";
 import { useRouter } from "next/navigation"; // ✅ Fixed for App Router
 import { db } from "@/lib/firebase"; // ✅ Use alias to avoid path issues
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, DocumentData } from "firebase/firestore";
+
+// If you know the specific shape of your data, create an interface
+interface WorkoutData {
+  // Add your specific fields here
+  name: string;
+  date: string;
+  // ... other fields
+}
+
+async function getData() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "yourCollectionName"))
+    const data = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+    return data
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    return []
+  }
+}
+
+// Removed duplicate default export function
 
 export default function WorkoutTracker() {
-  const [workoutData, setWorkoutData] = useState([]);
+  // Option 1: Use DocumentData if you don't need specific typing
+  const [data, setData] = useState<DocumentData[]>([]);
+
+  // OR
+
+  // Option 2: Use your custom interface for better type safety
+  const [workouts, setWorkouts] = useState<WorkoutData[]>([]);
+
+  const [workoutData, setWorkoutData] = useState<DocumentData[]>([]);
   const [currentDay, setCurrentDay] = useState("Push #1");
   const [progress, setProgress] = useState(0);
   const router = useRouter();
@@ -18,6 +50,8 @@ export default function WorkoutTracker() {
     const fetchData = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "workouts"));
+        const docsData = querySnapshot.docs.map(doc => doc.data());
+        setData(docsData); // or setWorkouts(docsData as WorkoutData[]);
         setWorkoutData(querySnapshot.docs.map(doc => doc.data()));
       } catch (error) {
         console.error("Error fetching workouts:", error);
